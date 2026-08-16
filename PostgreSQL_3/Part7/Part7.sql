@@ -1,4 +1,5 @@
 -- Part7.sql
+
 SELECT 
 	-- Concatenate first and last name with a space
 	CONCAT(c.first_name, ' ', c.last_name)
