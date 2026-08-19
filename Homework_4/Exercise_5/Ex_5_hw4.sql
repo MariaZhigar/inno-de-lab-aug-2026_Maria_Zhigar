@@ -31,7 +31,6 @@ SELECT
 	EmployeeID,		-- Employee ID
 	FirstName,		-- First name
 	LastName, 		-- Last name
-	Department,		-- Department
 	Salary			-- Salary
 FROM 
 	Employees		-- Source table

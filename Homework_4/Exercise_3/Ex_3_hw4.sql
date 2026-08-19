@@ -7,7 +7,10 @@ WITH PASSWORD
 	'secure_pass123'; 		-- Connection password
 
 -- Grant privileges on the employees table
-GRANT SELECT, INSERT, UPDATE 
+GRANT SELECT
+	ON employees 
+	TO hr_user;
+GRANT INSERT, UPDATE 
 	ON employees 
 	TO hr_user;
 -- Grant privileges on the sequence
