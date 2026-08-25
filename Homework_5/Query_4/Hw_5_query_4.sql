@@ -3,27 +3,22 @@
 SELECT 
     d.DayName,						-- Select day name
     COUNT(DISTINCT d.DateKey)
-    AS DaysCount,					-- Count how many times each weekday occurred in month
-    SUM(fo.Quantity * fo.UnitPrice) 
+    AS DaysCount,					-- Count how many times each weekday occurred in period (in this case, a week)
+    COALESCE(SUM(fo.Quantity * fo.UnitPrice), 0) 
     AS TotalRevenue,				-- Total revenue on certain days of the week
-    SUM(fo.Quantity * fo.UnitPrice) / COUNT(DISTINCT d.DateKey) 
+    COALESCE(SUM(fo.Quantity * fo.UnitPrice), 0) / COUNT(DISTINCT d.DateKey) 	-- COALESCE(x, 0) says: “if x is NULL, return 0.”
     AS AvgDailyRevenue,				-- Average revenue on certain days of the week
     SUM(fo.Quantity) 
     AS TotalPortions				-- Total portions
 FROM 
-	Fact_Orders AS fo
-INNER JOIN 
-	dim_date AS d
-	ON fo.DateKey = d.DateKey
+    dim_date AS d
+LEFT JOIN 
+    Fact_OrderLines AS fo
+    ON d.DateKey = fo.DateKey
+WHERE
+    d.fulldate BETWEEN '2026-08-01' AND '2026-08-08' -- Filter by period (in this case, a week)
 GROUP BY 
-	d.DayName						-- Group by weekday name
+	d.DayName,					-- Group by weekday name
+	d.DayOfWeekNumber
 ORDER BY 
-    CASE d.DayName					-- Sort weekdays in calendar order
-        WHEN 'Понедельник' THEN 1	-- CASE-based sorting: assign each day a number from 1 to 7
-        WHEN 'Вторник' THEN 2
-        WHEN 'Среда' THEN 3
-        WHEN 'Четверг' THEN 4
-        WHEN 'Пятница' THEN 5
-        WHEN 'Суббота' THEN 6
-        WHEN 'Воскресенье' THEN 7
-    END;
+    d.DayOfWeekNumber;
