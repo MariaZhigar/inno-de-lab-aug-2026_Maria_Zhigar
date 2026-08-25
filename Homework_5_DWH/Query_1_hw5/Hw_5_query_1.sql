@@ -4,7 +4,7 @@ SELECT
 	dmi.Name,
 	SUM(fo.quantity) AS amount_of_orders -- Sum the quantity of portions for each dish
 FROM 
-	fact_orders AS fo
+	Fact_OrderLines AS fo
 INNER JOIN 
 	dim_menu_item AS dmi
 	ON fo.menuitemkey = dmi.menuitemkey 
