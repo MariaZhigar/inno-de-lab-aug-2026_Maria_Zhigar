@@ -1,12 +1,14 @@
 # TASK 3. Secure refund processing
 # CONSTANTS
+from typing import Any, Tuple, Optional
+
 DEFAULT_RETURN_INDEX_BASE = 10.0
 
 def calculate_overdue_fine(
     movie_title: str,
     days_overdue: Any,
     fine_rate: float
-) -> tuple[float, float] | None:
+) -> Optional[Tuple[float, float]]:
     """Calculates the late payment penalty and the technical index of the refund.
 
         Handles data type errors, inability to convert a string
@@ -29,21 +31,12 @@ def calculate_overdue_fine(
             f"Индекс: {return_index}"
         )
         return total_fine, return_index
-    except TypeError:       # Catches type error
-        print(
-            f"[ОШИБКА ТИПА] Некорректный тип данных для '{movie_title}': "
-            f"float() argument must be a string or a real number, not 'list'"
-        )
-    except ValueError:      # Catches value error
-        print(
-            f"[ОШИБКА ЗНАЧЕНИЯ] Невозможно преобразовать дни в число для "
-            f"'{movie_title}': could not convert string to float: '{days_overdue}'"
-        )
-    except ZeroDivisionError:       # Catches division by zero
-        print(
-            f"[ОШИБКА ДЕЛЕНИЯ НА НОЛЬ] Возврат без просрочки для "
-            f"'{movie_title}': float division by zero"
-        )
+    except TypeError as e:       # Catches type error
+        print(f"[ОШИБКА ТИПА] Некорректный тип данных для {movie_title}: {e}" )
+    except ValueError as e:      # Catches value error
+        print(f"[ОШИБКА ЗНАЧЕНИЯ] Невозможно преобразовать дни в число для {movie_title}: {e}")
+    except ZeroDivisionError as e:       # Catches division by zero
+        print(f"[ОШИБКА ДЕЛЕНИЯ НА НОЛЬ] Возврат без просрочки для {movie_title}: {e}")
     finally:        # Always executes
         print("--- Проверка транзакции возврата завершена ---")
     return None     # Returns None on error
