@@ -1,5 +1,7 @@
 # Trainee Performance Tracking Module (Trainee LMS)
 
+from typing import List
+
 class Trainee:
     def __init__(self, name: str, surname: str, score: int = 0, passing_grade: int = 10) -> None:
         """
@@ -11,10 +13,10 @@ class Trainee:
                 score: Initial score (default is 0).
                 passing_grade: Passing score (default is 10).
             """
-        self.name = name
-        self.surname = surname
-        self.__score = score
-        self.passing_grade = passing_grade
+        self.name: str = name
+        self.surname: str = surname
+        self.score: int = score
+        self.passing_grade: int = passing_grade
 
     @property
     def score(self) -> int:
@@ -142,3 +144,27 @@ try:
     trainee.score = -5
 except ValueError as e:
     print(f"Ошибка: {e}")
+
+print()
+
+# 1. We create students of different types.
+std_trainee = Trainee("Алексей", "Смирнов", score=8, passing_grade=10)
+hard_trainee = HardworkingTrainee("Елена", "Петрова", score=8, passing_grade=10)
+audit_trainee = AuditTrainee("Дмитрий", "Сидоров", score=0, passing_grade=10)
+# 2. Create a group and add students
+cohort = Cohort("Python Advanced")
+cohort.add_trainee(std_trainee)
+cohort.add_trainee(hard_trainee)
+cohort.add_trainee(audit_trainee)
+# 3. We hold a lecture for the entire group (+1 point for everyone)
+cohort.conduct_lecture()
+# 4. We check the work of the redefined homework for the workaholic (+2 points)
+hard_trainee.do_homework()
+# 5. Display a list of those who are taking the course.
+passing_students = cohort.get_passing_students()
+print(f"=== УСПЕВАЕМОСТЬ ГРУППЫ '{cohort.title}' ===")
+for student in cohort.trainees:
+    print(f"{student.name} {student.surname} | Баллы: {student.score} | Проходит: {student.is_passing()}")
+print("\nУспешно зачислены на следующий модуль:")
+for student in passing_students:
+    print(f"- {student.name} {student.surname}")
